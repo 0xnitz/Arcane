@@ -8,28 +8,32 @@ namespace ArcaneErrors
 {
 	enum ErrorCodes
 	{
-		NotImplemented = 0
+		NotImplemented = 0,
+		OpenSCManagerFailed,
+		CloseServiceHandleFailed,
+		CreateServiceFailed,
+		DeleteServiceFailed,
+		StartServiceFailed,
+		ControlServiceFailed,
 	};
 }
-
-using namespace ArcaneErrors;
 
 class Exception
 {
 public:
-	explicit Exception(ErrorCodes error_code);
+	explicit Exception(ArcaneErrors::ErrorCodes error_code);
 
 	virtual ~Exception() = default;
 
-	NO_DISCARD ErrorCodes get_error_code() const;
+	NO_DISCARD ArcaneErrors::ErrorCodes get_error_code() const;
 
 	NO_DISCARD virtual std::wstring message() const;
 
 protected:
-	ErrorCodes m_error_code; // Exception error codes.
+	ArcaneErrors::ErrorCodes m_error_code; // Exception error codes.
 };
 
-#define CATCH_ALL() \
-	catch (const Exception& exception) { DEBUG_PRINT_W(exception.message().c_str()) } \
-	catch (const std::exception& exception) { DEBUG_PRINT(exception.what()); } \
-	catch (...) { DEBUG_PRINT("Unknown exception caught!"); }
+#define CATCH_ALL(error_message) \
+	catch (const Exception& exception) { DEBUG_PRINT_W(exception.message()) } \
+	catch (const std::exception& exception) { DEBUG_PRINT(std::string(exception.what())); } \
+	catch (...) { DEBUG_PRINT(std::string(error_message)); }
