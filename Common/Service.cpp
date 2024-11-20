@@ -1,7 +1,7 @@
 #include "Service.hpp"
 #include "WindowsException.hpp"
 
-Service::Service(const SC_HANDLE& manager_handle,
+Service::Service(const SmartSCHandle& manager_handle,
 	const std::wstring& service_name,
 	const ServiceAccessRights desired_access,
 	const ServiceType service_type,
@@ -11,24 +11,11 @@ Service::Service(const SC_HANDLE& manager_handle,
 {
 }
 
-Service::~Service()
-{
-	try
-	{
-		const BOOL close_service_result = CloseServiceHandle(m_handle);
-		if (close_service_result == FALSE)
-		{
-			throw WindowsException(ArcaneErrors::ErrorCodes::CloseServiceHandleFailed);
-		}
-	}
-	CATCH_ALL("Exception in Service Destructor!")
-}
-
 void Service::start()
 {
 	static constexpr uint32_t NO_ARGUMENTS = 0;
 	static constexpr LPCWSTR *NO_ARGUMENTS_PTR = nullptr;
-	const BOOL start_service_result = StartServiceW(m_handle, NO_ARGUMENTS, NO_ARGUMENTS_PTR);
+	const BOOL start_service_result = StartServiceW(m_handle.get(), NO_ARGUMENTS, NO_ARGUMENTS_PTR);
 	if (start_service_result == FALSE)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::StartServiceFailed);
@@ -39,7 +26,7 @@ void Service::stop()
 {
 	SERVICE_STATUS service_status;
 	static constexpr uint32_t STOP_SERVICE = SERVICE_CONTROL_STOP;
-	const BOOL control_service_result = ControlService(m_handle, STOP_SERVICE, &service_status);
+	const BOOL control_service_result = ControlService(m_handle.get(), STOP_SERVICE, &service_status);
 	if (control_service_result == FALSE)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::ControlServiceFailed);
@@ -48,14 +35,14 @@ void Service::stop()
 
 void Service::remove()
 {
-	const BOOL delete_service_result = DeleteService(m_handle);
+	const BOOL delete_service_result = DeleteService(m_handle.get());
 	if (delete_service_result == FALSE)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::DeleteServiceFailed);
 	}
 }
 
-SC_HANDLE Service::create_service(const SC_HANDLE& manager_handle,
+SmartSCHandle Service::create_service(const SmartSCHandle& manager_handle,
 	const std::wstring& service_name,
 	const ServiceAccessRights desired_access,
 	const ServiceType service_type,
@@ -69,7 +56,7 @@ SC_HANDLE Service::create_service(const SC_HANDLE& manager_handle,
 	static constexpr LPCWSTR NO_START_NAME = nullptr;
 	static constexpr LPCWSTR NO_PASSWORD = nullptr;
 
-	const SC_HANDLE out_handle = CreateServiceW(manager_handle,
+	const SC_HANDLE out_handle = CreateServiceW(manager_handle.get(),
 		service_name.c_str(),
 		service_name.c_str(),
 		desired_access,
@@ -87,5 +74,5 @@ SC_HANDLE Service::create_service(const SC_HANDLE& manager_handle,
 		throw WindowsException(ArcaneErrors::ErrorCodes::CreateServiceFailed);
 	}
 
-	return out_handle;
+	return SmartSCHandle(out_handle);
 }

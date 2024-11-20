@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DefinesMacros.hpp"
+#include "SmartHandleBase.hpp"
 
 #include <string>
 #include <filesystem>
@@ -48,14 +49,17 @@ enum ServiceStartType
 class Service final
 {
 public:
-	explicit Service(const SC_HANDLE& manager_handle,
+	explicit Service(const SmartSCHandle& manager_handle,
 		const std::wstring& service_name,
 		ServiceAccessRights desired_access,
 		ServiceType service_type,
 		ServiceStartType start_type,
 		const std::filesystem::path& binary_path);
 
-	~Service();
+	Service(Service const&) = delete;
+	Service(Service&&) = delete;
+	Service operator=(Service const&) = delete;
+	Service operator=(Service&&) = delete;
 
 	void start();
 
@@ -64,12 +68,12 @@ public:
 	void remove();
 
 private:
-	static NO_DISCARD SC_HANDLE create_service(const SC_HANDLE& manager_handle,
+	static NO_DISCARD SmartSCHandle create_service(const SmartSCHandle& manager_handle,
 		const std::wstring& service_name,
 		ServiceAccessRights desired_access,
 		ServiceType service_type,
 		ServiceStartType start_type,
 		const std::filesystem::path& binary_path);
 
-	SC_HANDLE m_handle; // Service handle.
+	SmartSCHandle m_handle; // Service handle.
 };

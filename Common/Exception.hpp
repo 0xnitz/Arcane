@@ -15,6 +15,7 @@ namespace ArcaneErrors
 		DeleteServiceFailed,
 		StartServiceFailed,
 		ControlServiceFailed,
+		CloseHandleCloseServiceHandleFailed
 	};
 }
 
