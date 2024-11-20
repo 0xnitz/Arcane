@@ -10,6 +10,6 @@
 #define DEBUG_PRINT(message)
 #define DEBUG_PRINT_W(message)
 #else
-#define DEBUG_PRINT(message) OutputDebugStringA(message);
-#define DEBUG_PRINT_W(message) OutputDebugStringW(message);
+#define DEBUG_PRINT(message) OutputDebugStringA(message.c_str());
+#define DEBUG_PRINT_W(message) OutputDebugStringW(message.c_str());
 #endif

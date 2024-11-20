@@ -1,11 +1,11 @@
 #include "Exception.hpp"
 
-Exception::Exception(const ErrorCodes error_code)
+Exception::Exception(const ArcaneErrors::ErrorCodes error_code)
 	: m_error_code(error_code)
 {
 }
 
-ErrorCodes Exception::get_error_code() const
+ArcaneErrors::ErrorCodes Exception::get_error_code() const
 {
 	return m_error_code;
 }

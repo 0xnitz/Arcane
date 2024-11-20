@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-WindowsException::WindowsException(const ErrorCodes error_code) :
+WindowsException::WindowsException(const ArcaneErrors::ErrorCodes error_code) :
 	Exception(error_code),
 	m_windows_error(GetLastError())
 {
