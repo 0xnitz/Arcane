@@ -38,20 +38,7 @@ void ServiceManager::remove_service(const std::wstring& service_name)
 	m_services.erase(service_name);
 }
 
-ServiceManager::~ServiceManager()
-{
-	try
-	{
-		const BOOL close_service_result = CloseServiceHandle(m_handle);
-		if (close_service_result == FALSE)
-		{
-			throw WindowsException(ArcaneErrors::ErrorCodes::CloseServiceHandleFailed);
-		}
-	}
-	CATCH_ALL("Exception in ServiceManager Destructor!")
-}
-
-SC_HANDLE ServiceManager::open_service_manager()
+SmartSCHandle ServiceManager::open_service_manager()
 {
 	const SC_HANDLE out_handle = OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CREATE_SERVICE);
 	if (out_handle == nullptr)
@@ -59,5 +46,5 @@ SC_HANDLE ServiceManager::open_service_manager()
 		throw WindowsException(ArcaneErrors::ErrorCodes::OpenSCManagerFailed);
 	}
 
-	return out_handle;
+	return SmartSCHandle(out_handle);
 }

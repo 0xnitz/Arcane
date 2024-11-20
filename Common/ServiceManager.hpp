@@ -2,6 +2,7 @@
 
 #include "Service.hpp"
 #include "DefinesMacros.hpp"
+#include "SmartHandleBase.hpp"
 
 #include <map>
 #include <string>
@@ -12,6 +13,11 @@ class ServiceManager final
 {
 public:
 	explicit ServiceManager();
+
+	ServiceManager(ServiceManager const&) = delete;
+	ServiceManager(ServiceManager&&) = delete;
+	ServiceManager operator=(ServiceManager const&) = delete;
+	ServiceManager operator=(ServiceManager&&) = delete;
 
 	void add_service(const std::wstring& service_name,
 		ServiceAccessRights desired_access,
@@ -25,12 +31,10 @@ public:
 
 	void remove_service(const std::wstring& service_name);
 
-	~ServiceManager();
-
 private:
-	NO_DISCARD static SC_HANDLE open_service_manager();
+	NO_DISCARD static SmartSCHandle open_service_manager();
 
-	SC_HANDLE m_handle; // Service Manager Handle.
+	SmartSCHandle m_handle; // Service Manager Handle.
 
 	ServiceMap m_services; // Services managed by this Service Manager.
 };

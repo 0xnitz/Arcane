@@ -1,8 +1,6 @@
 #include "Primal.hpp"
 #include "ArcaneLogic.hpp"
 
-#include <winternl.h>
-
 namespace ArcaneLogic
 {
 

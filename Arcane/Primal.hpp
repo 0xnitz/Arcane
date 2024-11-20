@@ -12,6 +12,11 @@ class Primal final
 public:
 	explicit Primal(const std::filesystem::path& primal_path);
 
+	Primal(Primal const&) = delete;
+	Primal(Primal&&) = delete;
+	Primal operator=(Primal const&) = delete;
+	Primal operator=(Primal&&) = delete;
+
 	~Primal();
 
 	void start_primal(const std::filesystem::path& primal_path);
