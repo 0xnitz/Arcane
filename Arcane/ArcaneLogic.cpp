@@ -8,9 +8,17 @@ void run(const std::wstring& command_line)
 {
 	Primal primal(command_line);
 
-	DEBUG_PRINT_W(command_line)
+	// Startup plugin threads/dlls
 
-		Sleep(1000 * 5);
+	while (should_run())
+	{
+		Sleep(1000);
+	}
+}
+
+bool should_run()
+{
+	return true;
 }
 
 }

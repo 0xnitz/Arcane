@@ -6,10 +6,14 @@
 
 namespace ArcaneLogic
 {
-	enum ArcaneParameters
-	{
-		DriverPath = 0
-	};
 
-	void run(const std::wstring& command_line);
+enum ArcaneParameters
+{
+	DriverPath = 0
+};
+
+void run(const std::wstring& command_line);
+
+bool should_run();
+
 }
