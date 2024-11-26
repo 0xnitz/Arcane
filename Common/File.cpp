@@ -9,15 +9,16 @@ File::File(const std::filesystem::path& file_path,
 {
 }
 
-ByteVector File::read(const uint32_t size_to_read)
+ByteVector File::read(const size_t size_to_read)
 {
 	ByteVector out_bytes;
+	out_bytes.resize(size_to_read);
 
 	DWORD bytes_read;
 	static constexpr LPOVERLAPPED NO_OVERLAP = nullptr;
 	const BOOL read_file_result = ReadFile(m_handle.get(),
 		out_bytes.data(),
-		size_to_read,
+		static_cast<DWORD>(size_to_read),
 		&bytes_read,
 		NO_OVERLAP);
 	if (read_file_result == FALSE)

@@ -7,3 +7,4 @@
 * better loading for malware
 * killswitch
 * sleep & obfuscate logic
+* add testing

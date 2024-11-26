@@ -20,7 +20,9 @@ namespace ArcaneErrors
 		SetFilePointerExFailed,
 		ReadFileFailed,
 		GetFileSizeExFailed,
-		WriteFileFailed
+		WriteFileFailed,
+		MultiByteToWideCharFailed,
+		WideCharToMultiByteFailed,
 	};
 }
 

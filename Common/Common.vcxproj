@@ -165,6 +165,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ByteVectorUtils.hpp" />
     <ClInclude Include="DefinesMacros.hpp" />
     <ClInclude Include="Exception.hpp" />
     <ClInclude Include="File.hpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="WindowsException.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ByteVectorUtils.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="Service.cpp" />

@@ -43,7 +43,7 @@ public:
 	File operator=(File const&) = delete;
 	File operator=(File&&) = delete;
 
-	NO_DISCARD ByteVector read(uint32_t size_to_read);
+	NO_DISCARD ByteVector read(size_t size_to_read);
 
 	void write(const ByteVector& data);
 
