@@ -6,7 +6,8 @@
 #include <windows.h>
 
 template <typename HandleType, auto CloseFunction>
-class SmartHandleBase {
+class SmartHandleBase final
+{
 public:
 	explicit SmartHandleBase(HandleType handle) :
 		m_handle(handle)

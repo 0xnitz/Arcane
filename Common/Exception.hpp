@@ -15,7 +15,14 @@ namespace ArcaneErrors
 		DeleteServiceFailed,
 		StartServiceFailed,
 		ControlServiceFailed,
-		CloseHandleCloseServiceHandleFailed
+		CloseHandleCloseServiceHandleFailed,
+		CreateFileWFailed,
+		SetFilePointerExFailed,
+		ReadFileFailed,
+		GetFileSizeExFailed,
+		WriteFileFailed,
+		MultiByteToWideCharFailed,
+		WideCharToMultiByteFailed,
 	};
 }
 

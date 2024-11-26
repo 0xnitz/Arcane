@@ -3,3 +3,8 @@
 * screenshot
 * persistency
 * protections
+* delete from disk
+* better loading for malware
+* killswitch
+* sleep & obfuscate logic
+* add testing
