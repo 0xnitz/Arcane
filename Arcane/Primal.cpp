@@ -6,6 +6,17 @@ Primal::Primal(const std::filesystem::path& primal_path) :
 	m_manager(ServiceManager())
 {
 	start_primal(primal_path);
+	if (m_running == false)
+	{
+		DEBUG_PRINT(std::string("Error Starting Primal!"));
+
+		throw Exception(ArcaneErrors::ErrorCodes::StartServiceFailed);
+	}
+
+	m_primal_device = std::make_unique<File>(PRIMAL_DEVICE_NAME,
+		static_cast<FileAccess>(FileAccess::GenericRead | FileAccess::GenericWrite),
+		FileShare::None,
+		FileCreationDisposition::OpenExisting);
 }
 
 Primal::~Primal()
@@ -45,4 +56,11 @@ void Primal::stop_primal()
 	}
 	
 	m_manager.remove_service(PRIMAL_SERVICE_NAME);
+}
+
+ByteVector Primal::primal_read_physical(Address64 address, size_t size)
+{
+	m_primal_device->seek(address);
+
+	return m_primal_device->read(size);
 }

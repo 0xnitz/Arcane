@@ -16,3 +16,4 @@
 #endif
 
 using ByteVector = std::vector<uint8_t>;
+using Address64 = uint64_t;
