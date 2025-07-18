@@ -12,6 +12,10 @@ void run(const std::wstring& command_line)
 
 	// Startup plugin threads/dlls
 
+	ByteVector bytes = primal.primal_read_physical(0x1000, 0x8);
+	uint64_t physical_address = reinterpret_cast<uint64_t>(bytes.data());
+	DEBUG_PRINT(std::string("Physical Address: " + std::to_string(physical_address)));
+
 	while (should_run())
 	{
 		Sleep(1000);

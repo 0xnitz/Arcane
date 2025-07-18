@@ -45,6 +45,8 @@ public:
 
 	NO_DISCARD ByteVector read(size_t size_to_read);
 
+	NO_DISCARD ByteVector read_with_overlap(Address64 overlap, size_t size_to_read);
+
 	void write(const ByteVector& data);
 
 	void seek(int64_t offset);
@@ -61,3 +63,5 @@ private:
 
 	LARGE_INTEGER m_offset; // Offset in file.
 };
+
+using FilePtr = std::unique_ptr<File>;

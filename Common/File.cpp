@@ -29,6 +29,29 @@ ByteVector File::read(const size_t size_to_read)
 	return out_bytes;
 }
 
+NO_DISCARD ByteVector File::read_with_overlap(Address64 overlap, size_t size_to_read)
+{
+	ByteVector out_bytes;
+	out_bytes.resize(size_to_read);
+
+	DWORD bytes_read;
+	LARGE_INTEGER overlap_offset = {
+		.QuadPart = static_cast<LONGLONG>(overlap)
+	};
+
+	const BOOL read_file_result = ReadFile(m_handle.get(),
+		out_bytes.data(),
+		static_cast<DWORD>(size_to_read),
+		&bytes_read,
+		reinterpret_cast<LPOVERLAPPED>(&overlap_offset));
+	if (read_file_result == FALSE)
+	{
+		throw WindowsException(ArcaneErrors::ErrorCodes::ReadFileFailed);
+	}
+
+	return out_bytes;
+}
+
 void File::write(const ByteVector& data)
 {
 	DWORD bytes_written;
