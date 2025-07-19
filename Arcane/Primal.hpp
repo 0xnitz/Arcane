@@ -25,7 +25,9 @@ public:
 
 	void stop_primal();
 
-	ByteVector primal_read_physical(Address64 address, size_t size);
+	ByteVector read_physical(Address64 address, size_t size);
+
+	void write_physical(ByteVector data, Address64 address);
 
 private:
 	bool m_running; // Flag to indicate if the Primal driver is running.
