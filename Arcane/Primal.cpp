@@ -58,9 +58,16 @@ void Primal::stop_primal()
 	m_manager.remove_service(PRIMAL_SERVICE_NAME);
 }
 
-ByteVector Primal::primal_read_physical(Address64 address, size_t size)
+ByteVector Primal::read_physical(Address64 address, size_t size)
 {
 	m_primal_device->seek(address);
 
 	return m_primal_device->read(size);
+}
+
+void Primal::write_physical(ByteVector data, Address64 address)
+{
+	m_primal_device->seek(address);
+
+	m_primal_device->write(data);
 }
