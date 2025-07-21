@@ -17,7 +17,7 @@ int wWinMain(
     {
 		ArcaneLogic::run(lpCmdLine);
     }
-    CATCH_ALL("Exception caught in Arcane main!")
+    CATCH_ALL(OBFUSCATE("Exception caught in Arcane main!"))
 
 	return 0;
 }

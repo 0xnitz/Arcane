@@ -29,7 +29,7 @@ public:
                 throw WindowsException(ArcaneErrors::ErrorCodes::CloseHandleCloseServiceHandleFailed);
             }
         }
-        CATCH_ALL("Exception in SmartHandleBase Destructor!")
+        CATCH_ALL(OBFUSCATE("Exception in SmartHandleBase Destructor!"))
     }
 
     HandleType get() const

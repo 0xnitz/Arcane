@@ -14,14 +14,14 @@ void run(const std::wstring& command_line)
 
 	ByteVector bytes = primal.read_physical(0x1000, 0x8);
 	uint64_t physical_address = *reinterpret_cast<uint64_t*>(bytes.data());
-	DEBUG_PRINT(std::string("Memory: " + std::to_string(physical_address)));
+	DEBUG_PRINT(std::string(OBFUSCATE("Memory: ") + std::to_string(physical_address)));
 
 	ByteVector bytes_to_write = { 0xDE, 0xAD, 0xBE, 0xEF, 0xDE, 0xAD, 0xBE, 0xEF };
 	primal.write_physical(bytes_to_write, 0x1000);
 
 	bytes = primal.read_physical(0x1000, 0x8);
 	physical_address = *reinterpret_cast<uint64_t*>(bytes.data());
-	DEBUG_PRINT(std::string("Memory: " + std::to_string(physical_address)));
+	DEBUG_PRINT(std::string(OBFUSCATE("Memory: ") + std::to_string(physical_address)));
 
 
 	while (should_run())

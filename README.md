@@ -7,3 +7,4 @@
 * better loading for malware
 * sleep & obfuscate logic
 * add testing
+* add api resolver

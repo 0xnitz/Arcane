@@ -6,8 +6,8 @@
 
 #include <filesystem>
 
-static const std::wstring PRIMAL_SERVICE_NAME = L"Primal";
-static const std::filesystem::path PRIMAL_DEVICE_NAME = L"\\\\.\\Primal";
+static const std::wstring PRIMAL_SERVICE_NAME = WOBFUSCATE(L"Primal");
+static const std::filesystem::path PRIMAL_DEVICE_NAME = WOBFUSCATE(L"\\\\.\\Primal");
 
 class Primal final
 {

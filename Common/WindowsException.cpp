@@ -15,6 +15,6 @@ uint32_t WindowsException::get_windows_error() const
 
 std::wstring WindowsException::message() const
 {
-	return L"WindowsException with Arcane Error -> " + std::to_wstring(m_error_code) +
-		L" Windows Error -> " + std::to_wstring(m_windows_error) + L"!";
+	return WOBFUSCATE(L"WindowsException with Arcane Error -> ") + std::to_wstring(m_error_code) +
+		WOBFUSCATE(L" Windows Error -> ") + std::to_wstring(m_windows_error) + WOBFUSCATE(L"!");
 }
