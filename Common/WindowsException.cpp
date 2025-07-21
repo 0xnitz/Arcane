@@ -4,7 +4,7 @@
 
 WindowsException::WindowsException(const ArcaneErrors::ErrorCodes error_code) :
 	Exception(error_code),
-	m_windows_error(GetLastError())
+	m_windows_error(RESOLVE(kernel32.dll, GetLastError)())
 {
 }
 

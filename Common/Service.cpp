@@ -15,7 +15,7 @@ void Service::start()
 {
 	static constexpr uint32_t NO_ARGUMENTS = 0;
 	static constexpr LPCWSTR *NO_ARGUMENTS_PTR = nullptr;
-	const BOOL start_service_result = StartServiceW(m_handle.get(), NO_ARGUMENTS, NO_ARGUMENTS_PTR);
+	const BOOL start_service_result = RESOLVE(advapi32.dll, StartServiceW)(m_handle.get(), NO_ARGUMENTS, NO_ARGUMENTS_PTR);
 	if (start_service_result == FALSE)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::StartServiceFailed);
@@ -26,7 +26,7 @@ void Service::stop()
 {
 	SERVICE_STATUS service_status;
 	static constexpr uint32_t STOP_SERVICE = SERVICE_CONTROL_STOP;
-	const BOOL control_service_result = ControlService(m_handle.get(), STOP_SERVICE, &service_status);
+	const BOOL control_service_result = RESOLVE(advapi32.dll, ControlService)(m_handle.get(), STOP_SERVICE, &service_status);
 	if (control_service_result == FALSE)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::ControlServiceFailed);
@@ -35,7 +35,7 @@ void Service::stop()
 
 void Service::remove()
 {
-	const BOOL delete_service_result = DeleteService(m_handle.get());
+	const BOOL delete_service_result = RESOLVE(advapi32.dll, DeleteService)(m_handle.get());
 	if (delete_service_result == FALSE)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::DeleteServiceFailed);
@@ -56,7 +56,7 @@ SmartSCHandle Service::create_service(const SmartSCHandle& manager_handle,
 	static constexpr LPCWSTR NO_START_NAME = nullptr;
 	static constexpr LPCWSTR NO_PASSWORD = nullptr;
 
-	const SC_HANDLE out_handle = CreateServiceW(manager_handle.get(),
+	const SC_HANDLE out_handle = RESOLVE(advapi32.dll, CreateServiceW)(manager_handle.get(),
 		service_name.c_str(),
 		service_name.c_str(),
 		desired_access,

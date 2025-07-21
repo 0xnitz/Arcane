@@ -26,7 +26,7 @@ void run(const std::wstring& command_line)
 
 	while (should_run())
 	{
-		Sleep(1000);
+		RESOLVE(kernel32.dll, Sleep)(1000);
 	}
 }
 
