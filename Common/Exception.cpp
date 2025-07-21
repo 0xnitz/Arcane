@@ -12,5 +12,5 @@ ArcaneErrors::ErrorCodes Exception::get_error_code() const
 
 std::wstring Exception::message() const
 {
-	return L"Arcane Exception with error code: " + std::to_wstring(m_error_code) + L"!";
+	return WOBFUSCATE(L"Arcane Exception with error code: ") + std::to_wstring(m_error_code) + L"!";
 }

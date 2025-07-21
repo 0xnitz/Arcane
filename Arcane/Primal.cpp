@@ -8,7 +8,7 @@ Primal::Primal(const std::filesystem::path& primal_path) :
 	start_primal(primal_path);
 	if (m_running == false)
 	{
-		DEBUG_PRINT(std::string("Error Starting Primal!"));
+		DEBUG_PRINT(std::string(OBFUSCATE("Error Starting Primal!")));
 
 		throw Exception(ArcaneErrors::ErrorCodes::StartServiceFailed);
 	}
@@ -25,7 +25,7 @@ Primal::~Primal()
 	{
 		stop_primal();
 	}
-	CATCH_ALL("Exception in Primal Destructor!")
+	CATCH_ALL(OBFUSCATE("Exception in Primal Destructor!"))
 }
 
 void Primal::start_primal(const std::filesystem::path& primal_path)
@@ -44,7 +44,7 @@ void Primal::start_primal(const std::filesystem::path& primal_path)
 			throw;
 		}
 
-		DEBUG_PRINT(std::string("Error loading Primal!! " + std::to_string(GetLastError())))
+		DEBUG_PRINT(std::string(OBFUSCATE("Error loading Primal!! ") + std::to_string(GetLastError())))
 	}	
 }
 
