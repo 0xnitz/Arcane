@@ -40,7 +40,7 @@ void ServiceManager::remove_service(const std::wstring& service_name)
 
 SmartSCHandle ServiceManager::open_service_manager()
 {
-	const SC_HANDLE out_handle = OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CREATE_SERVICE);
+	const SC_HANDLE out_handle = RESOLVE(advapi32.dll, OpenSCManagerW)(nullptr, nullptr, SC_MANAGER_CREATE_SERVICE);
 	if (out_handle == nullptr)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::OpenSCManagerFailed);

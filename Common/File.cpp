@@ -16,7 +16,7 @@ ByteVector File::read(const size_t size_to_read)
 
 	DWORD bytes_read;
 	static constexpr LPOVERLAPPED NO_OVERLAP = nullptr;
-	const BOOL read_file_result = ReadFile(m_handle.get(),
+	const BOOL read_file_result = RESOLVE(kernel32.dll, ReadFile)(m_handle.get(),
 		out_bytes.data(),
 		static_cast<DWORD>(size_to_read),
 		&bytes_read,
@@ -39,7 +39,7 @@ NO_DISCARD ByteVector File::read_with_overlap(Address64 overlap, size_t size_to_
 		.QuadPart = static_cast<LONGLONG>(overlap)
 	};
 
-	const BOOL read_file_result = ReadFile(m_handle.get(),
+	const BOOL read_file_result = RESOLVE(kernel32.dll, ReadFile)(m_handle.get(),
 		out_bytes.data(),
 		static_cast<DWORD>(size_to_read),
 		&bytes_read,
@@ -56,7 +56,7 @@ void File::write(const ByteVector& data)
 {
 	DWORD bytes_written;
 	static constexpr LPOVERLAPPED NO_OVERLAP = nullptr;
-	const BOOL write_file_result = WriteFile(m_handle.get(),
+	const BOOL write_file_result = RESOLVE(kernel32.dll, WriteFile)(m_handle.get(),
 		data.data(),
 		static_cast<DWORD>(data.size()),
 		&bytes_written,
@@ -74,7 +74,7 @@ void File::seek(const int64_t offset)
 	};
 
 	static constexpr DWORD SEEK_FROM_START = FILE_BEGIN;
-	const BOOL set_file_pointer_result = SetFilePointerEx(m_handle.get(),
+	const BOOL set_file_pointer_result = RESOLVE(kernel32.dll, SetFilePointerEx)(m_handle.get(),
 		distance_to_move,
 		&m_offset,
 		SEEK_FROM_START);
@@ -87,7 +87,7 @@ void File::seek(const int64_t offset)
 size_t File::size() const
 {
 	LARGE_INTEGER file_size;
-	const BOOL get_file_size_result = GetFileSizeEx(m_handle.get(), &file_size);
+	const BOOL get_file_size_result = RESOLVE(kernel32.dll, GetFileSizeEx)(m_handle.get(), &file_size);
 	if (get_file_size_result == FALSE)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::GetFileSizeExFailed);
@@ -104,7 +104,7 @@ SmartHandle File::open_file(const std::filesystem::path& file_path,
 	static constexpr LPSECURITY_ATTRIBUTES NO_INHERIT = nullptr;
 	static constexpr DWORD NORMAL_ATTRIBUTES = FILE_ATTRIBUTE_NORMAL;
 	static constexpr HANDLE NO_TEMPLATE = nullptr;
-	const HANDLE file_handle = CreateFileW(file_path.c_str(),
+	const HANDLE file_handle = RESOLVE(kernel32.dll, CreateFileW)(file_path.c_str(),
 		file_access,
 		file_share,
 		NO_INHERIT,

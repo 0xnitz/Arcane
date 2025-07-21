@@ -19,7 +19,7 @@ ByteVector from_wstring(const std::wstring& string_to_convert)
 	static constexpr int QUERY_SIZE_LENGTH = 0;
 	static constexpr LPCCH NO_DEFAULT_CHAR = nullptr;
 	static constexpr LPBOOL USE_DEFAULT_CHAR = nullptr;
-	const int required_size = WideCharToMultiByte(UTF8,
+	const int required_size = RESOLVE(kernel32.dll, WideCharToMultiByte)(UTF8,
 		NO_FLAGS,
 		string_to_convert.data(),
 		static_cast<int>(string_to_convert.size()),
@@ -34,7 +34,7 @@ ByteVector from_wstring(const std::wstring& string_to_convert)
 
 	out_vector.resize(required_size);
 
-	const int conversion_result = WideCharToMultiByte(UTF8,
+	const int conversion_result = RESOLVE(kernel32.dll, WideCharToMultiByte)(UTF8,
 		NO_FLAGS,
 		string_to_convert.data(),
 		static_cast<int>(string_to_convert.size()),
@@ -63,7 +63,7 @@ std::wstring to_wstring(const ByteVector& vector)
 	static constexpr DWORD NO_FLAGS = 0;
 	static constexpr LPWSTR QUERY_SIZE = nullptr;
 	static constexpr int QUERY_SIZE_LENGTH = 0;
-	const int required_size = MultiByteToWideChar(UTF8, 
+	const int required_size = RESOLVE(kernel32.dll, MultiByteToWideChar)(UTF8, 
 		NO_FLAGS,
 		reinterpret_cast<const char*>(vector.data()),
 		static_cast<int>(vector.size()),
@@ -76,7 +76,7 @@ std::wstring to_wstring(const ByteVector& vector)
 
 	out_string.resize(required_size);
 
-	const int conversion_result = MultiByteToWideChar(UTF8,
+	const int conversion_result = RESOLVE(kernel32.dll, MultiByteToWideChar)(UTF8,
 		NO_FLAGS,
 		reinterpret_cast<const char*>(vector.data()),
 		static_cast<int>(vector.size()),
