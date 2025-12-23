@@ -23,6 +23,18 @@ namespace ArcaneErrors
 		WriteFileFailed,
 		MultiByteToWideCharFailed,
 		WideCharToMultiByteFailed,
+		CreateProcessFailed,
+		OpenProcessFailed,
+		WriteProcessMemoryFailed,
+		ReadProcessMemoryFailed,
+		CreateRemoteThreadFailed,
+		OpenThreadFailed,
+		SuspendThreadFailed,
+		ResumeThreadFailed,
+		QueueUserApcFailed,
+		CreateToolhelp32SnapshotFailed,
+		Process32FirstWFailed,
+		Process32NextWFailed
 	};
 }
 
