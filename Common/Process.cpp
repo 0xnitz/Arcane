@@ -43,7 +43,7 @@ Process::Process(const std::filesystem::path& file_path, const std::wstring& com
 {
 }
 
-Process::Process(Pid pid, const ProcessAccess access_rights, const std::wstring& process_name = L"") :
+Process::Process(Pid pid, const ProcessAccess access_rights, const std::wstring& process_name) :
 	m_handle(open_process(pid, access_rights, process_name)),
 	m_pid(pid)
 {
@@ -81,9 +81,44 @@ void Process::write(const Address64 address, const ByteVector& data)
 	}
 }
 
+Address64 Process::allocate_memory(const size_t size, const AllocationType allocation_type, const Protection protection)
+{
+	static constexpr LPVOID ALLOCATE_RANDOM_ADDRESS = nullptr;
+	Address64 allocated = reinterpret_cast<Address64>(RESOLVE(kernel32.dll, VirtualAllocEx)(m_handle.get(),
+		ALLOCATE_RANDOM_ADDRESS,
+		size,
+		allocation_type,
+		protection));
+	if (allocated == NULL)
+	{
+		throw WindowsException(ArcaneErrors::ErrorCodes::VirtualAllocExFailed);
+	}
+
+	return allocated;
+}
+
+void Process::change_protection(const Address64 address, const size_t size, const Protection new_protection)
+{
+	Protection old_protection;
+	BOOL virtual_protect_result = RESOLVE(kernel32.dll, VirtualProtectEx)(m_handle.get(),
+		reinterpret_cast<LPVOID>(address),
+		size,
+		new_protection,
+		reinterpret_cast<PDWORD>(&old_protection));
+	if (virtual_protect_result == FALSE)
+	{
+		throw WindowsException(ArcaneErrors::ErrorCodes::VirtualProtectExFailed);
+	}
+}
+
 NO_DISCARD HANDLE Process::get_handle()
 {
 	return m_handle.get();
+}
+
+NO_DISCARD Pid Process::get_pid()
+{
+	return m_pid;
 }
 
 NO_DISCARD SmartHandle Process::open_process(Pid pid,

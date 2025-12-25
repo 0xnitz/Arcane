@@ -167,10 +167,12 @@
   <ItemGroup>
     <ClInclude Include="ByteVectorUtils.hpp" />
     <ClInclude Include="DefinesMacros.hpp" />
+    <ClInclude Include="Encryption.hpp" />
     <ClInclude Include="Exception.hpp" />
     <ClInclude Include="File.hpp" />
     <ClInclude Include="Obfuscation.hpp" />
     <ClInclude Include="Process.hpp" />
+    <ClInclude Include="ReflectiveLoader.hpp" />
     <ClInclude Include="Service.hpp" />
     <ClInclude Include="ServiceManager.hpp" />
     <ClInclude Include="SmartHandleBase.hpp" />
@@ -179,9 +181,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ByteVectorUtils.cpp" />
+    <ClCompile Include="Encryption.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="Process.cpp" />
+    <ClCompile Include="ReflectiveLoader.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="ServiceManager.cpp" />
     <ClCompile Include="Thread.cpp" />

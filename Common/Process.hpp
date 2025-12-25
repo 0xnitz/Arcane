@@ -8,7 +8,7 @@
 namespace process_utils
 {
 
-NO_DISCARD static Pid get_pid_by_name(const std::wstring& process_name);
+NO_DISCARD Pid get_pid_by_name(const std::wstring& process_name);
 
 }
 
@@ -24,6 +24,27 @@ enum ProcessAccess : DWORD
 	AccessReadWrite = PROCESS_VM_OPERATION
 };
 
+enum AllocationType : DWORD
+{
+	Commit = MEM_COMMIT,
+	Reserve = MEM_RESERVE,
+	Reset = MEM_RESET,
+	ResetUndo = MEM_RESET_UNDO,
+	LargePages = MEM_LARGE_PAGES,
+	Physical = MEM_PHYSICAL,
+	TopDown = MEM_TOP_DOWN
+};
+
+enum Protection : DWORD
+{
+	ProtectionNoAccess = PAGE_NOACCESS,
+	ProtectionReadOnly = PAGE_READONLY,
+	ProtectionReadWrite = PAGE_READWRITE,
+	ProtectionReadExecute = PAGE_EXECUTE_READ,
+	ProtectionReadWriteExecute = PAGE_EXECUTE_READWRITE,
+	ProtectionCopyOnWrite = PAGE_WRITECOPY
+};
+
 class Process final
 {
 public:
@@ -32,7 +53,7 @@ public:
 
 	explicit Process(Pid pid,
 		const ProcessAccess access_rights,
-		const std::wstring& process_name);
+		const std::wstring& process_name = L"");
 
 	Process(Process const&) = delete;
 	Process(Process&&) = delete;
@@ -43,7 +64,13 @@ public:
 
 	void write(const Address64 address, const ByteVector& data);
 
+	Address64 allocate_memory(const size_t size, const AllocationType allocation_type, const Protection protection);
+
+	void change_protection(const Address64 address, const size_t size, const Protection new_protection);
+
 	NO_DISCARD HANDLE get_handle(); // BAD BUT I WILL CHANGE IT
+
+	NO_DISCARD Pid get_pid();
 
 private:
 	NO_DISCARD static SmartHandle open_process(Pid pid,

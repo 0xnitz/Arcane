@@ -34,7 +34,10 @@ namespace ArcaneErrors
 		QueueUserApcFailed,
 		CreateToolhelp32SnapshotFailed,
 		Process32FirstWFailed,
-		Process32NextWFailed
+		Process32NextWFailed,
+		VirtualAllocExFailed,
+		VirtualProtectExFailed,
+		GetProcessIdOfThreadFailed
 	};
 }
 
