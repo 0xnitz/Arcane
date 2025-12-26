@@ -1,14 +1,21 @@
 #include "Thread.hpp"
 
 Thread::Thread(const Tid tid, const ThreadAccess thread_access) :
-	m_process(std::make_unique<Process>(get_process_id_of_thread(m_handle), ProcessAccess::AllAccess)),
+	m_process(std::make_unique<Process>(get_process_id_of_thread(m_handle), ProcessAccess::ProcessAllAccess)),
 	m_handle(open_thread(tid, thread_access)),
 	m_tid(tid)
 {
 }
 
 Thread::Thread(const Pid pid, const ThreadCreationFlags creation_flags, LPTHREAD_START_ROUTINE thread_start, LPVOID param) :
-	m_process(std::make_unique<Process>(pid, ProcessAccess::AllAccess)),
+	m_process(std::make_unique<Process>(pid, ProcessAccess::ProcessAllAccess)),
+	m_handle(create_thread(m_process, creation_flags, thread_start, param)),
+	m_tid(get_thread_tid(m_handle.get()))
+{
+}
+
+Thread::Thread(const ThreadCreationFlags creation_flags, LPTHREAD_START_ROUTINE thread_start, LPVOID param) :
+	m_process(std::make_unique<Process>(process_utils::get_current_process_id(), ProcessAccess::ProcessAllAccess)),
 	m_handle(create_thread(m_process, creation_flags, thread_start, param)),
 	m_tid(get_thread_tid(m_handle.get()))
 {

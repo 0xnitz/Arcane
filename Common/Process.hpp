@@ -10,6 +10,8 @@ namespace process_utils
 
 NO_DISCARD Pid get_pid_by_name(const std::wstring& process_name);
 
+NO_DISCARD Pid get_current_process_id();
+
 }
 
 // TODO: Better thread creation API, currently revealing api. Tried to use friend but need to do it better
@@ -18,7 +20,7 @@ enum ProcessAccess : DWORD
 {
 	AccessDelete = DELETE,
 	AccessRead = READ_CONTROL,
-	AllAccess = PROCESS_ALL_ACCESS,
+	ProcessAllAccess = PROCESS_ALL_ACCESS,
 	AccessCreateThread = PROCESS_CREATE_THREAD,
 	AccessSuspendResume = PROCESS_SUSPEND_RESUME,
 	AccessReadWrite = PROCESS_VM_OPERATION

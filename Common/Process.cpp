@@ -35,6 +35,11 @@ NO_DISCARD Pid get_pid_by_name(const std::wstring& process_name)
 	return NULL;
 }
 
+NO_DISCARD Pid get_current_process_id()
+{
+	return RESOLVE(kernel32.dll, GetCurrentProcessId)();
+}
+
 }
 
 Process::Process(const std::filesystem::path& file_path, const std::wstring& command_line) :

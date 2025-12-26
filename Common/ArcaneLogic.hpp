@@ -19,6 +19,8 @@ static constexpr std::wstring_view ARCANE_KILL_MAGIC = L"1";
 
 void run(const std::wstring& command_line);
 
+void run_in_thread(std::wstring& command_line);
+
 bool should_run();
 
 }

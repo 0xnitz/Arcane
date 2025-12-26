@@ -28,6 +28,10 @@ public:
 		LPTHREAD_START_ROUTINE thread_start,
 		LPVOID param);
 
+	explicit Thread(const ThreadCreationFlags creation_flags,
+		LPTHREAD_START_ROUTINE thread_start,
+		LPVOID param);
+
 	Thread(Thread const&) = delete;
 	Thread(Thread&&) = delete;
 	Thread operator=(Thread const&) = delete;

