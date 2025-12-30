@@ -38,7 +38,8 @@ public:
 	void run_module_in_victim();
 
 private:
-	// Walk on export dir and find the only exported function, this will be the DLL's LPTHREAD_START_ROUTINE "real" entrypoint for our purpose
+	// Walk on export dir and find the only exported function (besides dllmain, when testing this one is always first), this will be the DLL's LPTHREAD_START_ROUTINE "real" entrypoint for our purpose
+	// TODO: add a gtest for this edge case and check if it is always first
 	NO_DISCARD static Address64 get_entrypoint_from_exports(const ByteVector& module_to_inject);
 
 	NO_DISCARD static PREFLECTIVE_PARAMS initialize_params(const std::wstring& command_line);
