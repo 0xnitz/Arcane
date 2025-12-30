@@ -39,7 +39,6 @@ ReflectiveLoader::~ReflectiveLoader()
 
 void ReflectiveLoader::inject_module()
 {
-	// TODO: change this to be more stealthy
 	m_remote_address = m_victim_process->allocate_memory(m_module_to_inject.size(), AllocationType::Commit, Protection::ProtectionReadWriteExecute);
 	m_victim_process->write(m_remote_address, m_module_to_inject);
 
