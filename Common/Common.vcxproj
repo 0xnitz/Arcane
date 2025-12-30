@@ -165,22 +165,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ArcaneLogic.hpp" />
     <ClInclude Include="ByteVectorUtils.hpp" />
     <ClInclude Include="DefinesMacros.hpp" />
+    <ClInclude Include="Encryption.hpp" />
     <ClInclude Include="Exception.hpp" />
     <ClInclude Include="File.hpp" />
     <ClInclude Include="Obfuscation.hpp" />
+    <ClInclude Include="PeUtils.hpp" />
+    <ClInclude Include="Primal.hpp" />
+    <ClInclude Include="Process.hpp" />
+    <ClInclude Include="ReflectiveLoader.hpp" />
+    <ClInclude Include="SelfDelete.hpp" />
+    <ClInclude Include="SelfDeleteAPC.hpp" />
     <ClInclude Include="Service.hpp" />
     <ClInclude Include="ServiceManager.hpp" />
     <ClInclude Include="SmartHandleBase.hpp" />
+    <ClInclude Include="Thread.hpp" />
     <ClInclude Include="WindowsException.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArcaneLogic.cpp" />
     <ClCompile Include="ByteVectorUtils.cpp" />
+    <ClCompile Include="Encryption.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="File.cpp" />
+    <ClCompile Include="PeUtils.cpp" />
+    <ClCompile Include="Primal.cpp" />
+    <ClCompile Include="Process.cpp" />
+    <ClCompile Include="ReflectiveLoader.cpp" />
+    <ClCompile Include="SelfDelete.cpp" />
+    <ClCompile Include="SelfDeleteAPC.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="ServiceManager.cpp" />
+    <ClCompile Include="Thread.cpp" />
     <ClCompile Include="WindowsException.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

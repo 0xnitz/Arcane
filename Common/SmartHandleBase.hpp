@@ -23,7 +23,18 @@ public:
     {
         try
         {
-            const BOOL close_result = CloseFunction(m_handle);
+            // This stub exists to get rid of the advapi32 dependency in my stage1
+            BOOL close_result = FALSE;
+
+            if constexpr (std::is_same_v<decltype(CloseFunction), decltype(&CloseServiceHandle)>)
+            {
+                close_result = RESOLVE(advapi32.dll, CloseServiceHandle)(m_handle);
+            }
+            else
+            {
+                close_result = CloseFunction(m_handle);
+            }
+
             if (close_result == FALSE)
             {
                 throw WindowsException(ArcaneErrors::ErrorCodes::CloseHandleCloseServiceHandleFailed);

@@ -22,7 +22,7 @@ enum ServiceAccessRights
 	WriteDac = WRITE_DAC,
 	WriteOwner = WRITE_OWNER,
 	StandardRightsRequired = STANDARD_RIGHTS_REQUIRED,
-	AllAccess = SERVICE_ALL_ACCESS,
+	ServiceAllAccess = SERVICE_ALL_ACCESS,
 	StartStopDelete = DELETE | SERVICE_START | SERVICE_STOP
 };
 

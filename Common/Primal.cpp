@@ -30,7 +30,7 @@ Primal::~Primal()
 
 void Primal::start_primal(const std::filesystem::path& primal_path)
 {
-	m_manager.add_service(PRIMAL_SERVICE_NAME, ServiceAccessRights::AllAccess, ServiceType::KernelDriver, ServiceStartType::DemandStart, primal_path);
+	m_manager.add_service(PRIMAL_SERVICE_NAME, ServiceAccessRights::ServiceAllAccess, ServiceType::KernelDriver, ServiceStartType::DemandStart, primal_path);
 
 	try
 	{

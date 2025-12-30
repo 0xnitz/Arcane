@@ -1,4 +1,5 @@
 #include "File.hpp"
+#include "Thread.hpp"
 #include "Primal.hpp"
 #include "ArcaneLogic.hpp"
 #include "ByteVectorUtils.hpp"
@@ -28,6 +29,13 @@ void run(const std::wstring& command_line)
 	{
 		RESOLVE(kernel32.dll, Sleep)(1000);
 	}
+}
+
+void run_in_thread(std::wstring& command_line)
+{
+	Thread arcane_thread(ThreadCreationFlags::ThreadCreationNone,
+		reinterpret_cast<LPTHREAD_START_ROUTINE>(run),
+		reinterpret_cast<LPVOID>(command_line.data()));
 }
 
 bool should_run()
