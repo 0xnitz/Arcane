@@ -37,7 +37,9 @@ namespace ArcaneErrors
 		Process32NextWFailed,
 		VirtualAllocExFailed,
 		VirtualProtectExFailed,
-		GetProcessIdOfThreadFailed
+		GetProcessIdOfThreadFailed,
+		GetModuleFileNameWFailed,
+		Thread32FirstWFailed
 	};
 }
 

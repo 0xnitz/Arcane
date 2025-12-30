@@ -63,6 +63,12 @@
     <ClInclude Include="Primal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SelfDelete.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SelfDeleteAPC.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -102,6 +108,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Primal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SelfDelete.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SelfDeleteAPC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

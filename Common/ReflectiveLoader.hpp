@@ -12,6 +12,13 @@ typedef struct
 	Address64 base_address;
 } REFLECTIVE_PARAMS, *PREFLECTIVE_PARAMS;
 
+namespace reflective_loader_utils
+{
+
+NO_DISCARD ProcessPtr find_victim_process();
+
+}
+
 class ReflectiveLoader final
 {
 public:
@@ -29,8 +36,6 @@ public:
 	void inject_module();
 
 	void run_module_in_victim();
-
-	NO_DISCARD static ProcessPtr find_victim_process();
 
 private:
 	// Walk on export dir and find the only exported function, this will be the DLL's LPTHREAD_START_ROUTINE "real" entrypoint for our purpose

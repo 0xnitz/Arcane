@@ -1,7 +1,9 @@
 #include "Thread.hpp"
 
-Thread::Thread(const Tid tid, const ThreadAccess thread_access) :
-	m_process(std::make_unique<Process>(get_process_id_of_thread(m_handle), ProcessAccess::ProcessAllAccess)),
+#include "tlhelp32.h"
+
+Thread::Thread(const Pid pid, const Tid tid, const ThreadAccess thread_access) :
+	m_process(std::make_unique<Process>(pid, ProcessAccess::ProcessAllAccess)),
 	m_handle(open_thread(tid, thread_access)),
 	m_tid(tid)
 {
@@ -21,7 +23,7 @@ Thread::Thread(const ThreadCreationFlags creation_flags, LPTHREAD_START_ROUTINE 
 {
 }
 
-uint32_t Thread::suspend()
+NO_DISCARD uint32_t Thread::suspend()
 {
 	DWORD suspend_count = RESOLVE(kernel32.dll, SuspendThread)(m_handle.get());
 	if (suspend_count == -1)
@@ -32,7 +34,7 @@ uint32_t Thread::suspend()
 	return suspend_count;
 }
 
-uint32_t Thread::resume()
+NO_DISCARD uint32_t Thread::resume()
 {
 	DWORD suspend_count = RESOLVE(kernel32.dll, ResumeThread)(m_handle.get());
 	if (suspend_count == -1)
@@ -50,6 +52,11 @@ void Thread::queue_apc(PAPCFUNC callback, ULONG_PTR param)
 	{
 		throw WindowsException(ArcaneErrors::ErrorCodes::QueueUserApcFailed);
 	}
+}
+
+NO_DISCARD Tid Thread::get_tid()
+{
+	return m_tid;
 }
 
 NO_DISCARD Pid Thread::get_process_id_of_thread(const SmartHandle& thread_handle)
@@ -100,3 +107,50 @@ NO_DISCARD Tid Thread::get_thread_tid(HANDLE thread_handle)
 {
 	return GetThreadId(thread_handle);
 }
+
+namespace thread_utils
+{
+
+void thread_utils::queue_apc_to_all_threads_of_process(const Pid pid, PAPCFUNC callback, ULONG_PTR param)
+{
+	std::vector<Tid> threads = thread_utils::get_all_tids_of_process(pid);
+	for (const Tid tid : threads)
+	{
+		Thread current_thrad(pid, tid, ThreadAccess::ThreadAllAccess);
+		current_thrad.queue_apc(callback, param);
+	}
+}
+
+NO_DISCARD std::vector<Tid> get_all_tids_of_process(const Pid pid)
+{
+	std::vector<Tid> threads;
+
+	HANDLE thread_walk_handle_inner = RESOLVE(kernel32.dll, CreateToolhelp32Snapshot)(TH32CS_SNAPTHREAD, pid);
+	if (thread_walk_handle_inner == INVALID_HANDLE_VALUE)
+	{
+		throw WindowsException(ArcaneErrors::ErrorCodes::CreateToolhelp32SnapshotFailed);
+	}
+
+	SmartHandle thread_walk_handle(thread_walk_handle_inner);
+
+	THREADENTRY32 current_thread;
+	current_thread.dwSize = sizeof(THREADENTRY32);
+
+	if (!RESOLVE(kernel32.dll, Thread32First)(thread_walk_handle.get(), &current_thread))
+	{
+		throw WindowsException(ArcaneErrors::ErrorCodes::Thread32FirstWFailed);
+	}
+
+	do
+	{
+		if (current_thread.th32OwnerProcessID == pid && current_thread.th32ThreadID)
+		{
+			threads.push_back(current_thread.th32ThreadID);
+		}
+	} while (RESOLVE(kernel32.dll, Thread32Next)(thread_walk_handle.get(), &current_thread));
+
+	return threads;
+}
+
+}
+

@@ -40,6 +40,19 @@ NO_DISCARD Pid get_current_process_id()
 	return RESOLVE(kernel32.dll, GetCurrentProcessId)();
 }
 
+NO_DISCARD std::filesystem::path get_current_process_filename()
+{
+	HMODULE current_process = NULL;
+	wchar_t process_filename[MAX_PATH];
+	const DWORD get_module_handle_result = RESOLVE(kernel32.dll, GetModuleFileNameW)(current_process, process_filename, MAX_PATH);
+	if (get_module_handle_result == 0)
+	{
+		throw WindowsException(ArcaneErrors::ErrorCodes::GetModuleFileNameWFailed);
+	}
+
+	return process_filename;
+}
+
 }
 
 Process::Process(const std::filesystem::path& file_path, const std::wstring& command_line) :
@@ -88,6 +101,8 @@ void Process::write(const Address64 address, const ByteVector& data)
 
 Address64 Process::allocate_memory(const size_t size, const AllocationType allocation_type, const Protection protection)
 {
+	// TODO: Stealthier allocations
+
 	static constexpr LPVOID ALLOCATE_RANDOM_ADDRESS = nullptr;
 	Address64 allocated = reinterpret_cast<Address64>(RESOLVE(kernel32.dll, VirtualAllocEx)(m_handle.get(),
 		ALLOCATE_RANDOM_ADDRESS,
@@ -134,7 +149,7 @@ NO_DISCARD SmartHandle Process::open_process(Pid pid,
 	{
 		pid = process_utils::get_pid_by_name(process_name);
 	}
-
+	
 	static constexpr BOOL DONT_INHERIT = FALSE;
 	HANDLE process_handle = RESOLVE(kernel32.dll, OpenProcess)(access_rights, DONT_INHERIT, pid);
 	if (process_handle == nullptr)
