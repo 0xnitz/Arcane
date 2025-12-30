@@ -2,7 +2,6 @@
 
 void SelfDeleteAPC::do_delete()
 {
-	// TODO: change to ROP to Sleep with a few seconds and then DeleteFileW
 	// TODO: make stage1 delete self delete allocations
 
 	size_t path_size = (std::wstring(m_file_path.c_str()).size() + 1) * sizeof(wchar_t);
